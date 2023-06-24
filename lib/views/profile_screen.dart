@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:grad_app/resources/app_colors.dart';
 import 'package:grad_app/resources/app_images.dart';
 import 'package:grad_app/views/login_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../components/custom_row.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+  const ProfileScreen({Key? key, required this.userData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -235,11 +238,25 @@ class ProfileScreen extends StatelessWidget {
                   imageColor: AppColors.kSecondryColor,
                   text: 'Log Out',
                   image: AppImages.logout,
-                  function: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const LoginScreen();
-                    }));
+                  function: () async {
+                    Map<String, String> userToken = {
+                      'Authorization': userData['token'],
+                      'Content-Type': 'application/x-www-form-urlencoded'
+                    };
+                    String url = "http://localhost:8080/signout";
+                    Uri uri = Uri.parse(url);
+                    print("URL is " + url);
+                    print("####Sending keys####");
+                    var response = await http.post(uri, headers: userToken);
+                    Map<String, dynamic> responseBody = jsonDecode(response.body);
+                    if (responseBody['status'] == 'true'){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return const LoginScreen();
+                          }));
+                    }else{
+                      print(responseBody);
+                    }
                   },
                 ),
               ),
