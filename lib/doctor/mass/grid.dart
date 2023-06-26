@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grad_app/doctor/image_picker/XRay_image_picker.dart';
+import 'package:grad_app/doctor/image_picker/detection_image_picker.dart';
+import 'package:grad_app/doctor/image_picker/general_picker.dart';
+import 'package:grad_app/doctor/image_picker/image_picker_knee.dart';
+import 'package:grad_app/doctor/image_picker/mri_picker.dart';
+import 'package:grad_app/doctor/image_picker/segmentation_image_picker.dart';
 import 'package:grad_app/resources/app_images.dart';
 
-import '../image_picker/image_picker_doctor.dart';
-
 class GridDashboard extends StatelessWidget {
-  Items item1 = Items(title: "General", img: AppImages.general);
+  Items item1 = Items(
+      title: "General",
+      img: AppImages.general,
+      page: const GeneralImagePicker());
 
   Items item2 = Items(
     title: "Mri",
     img: AppImages.mriIcon,
+    page: const MriImagePicker(),
   );
 
   Items item3 = Items(
     title: "Knee",
     img: AppImages.knee,
+    page: const KneeImagePicker(),
   );
   Items item4 = Items(
     title: "Segmentation",
     img: AppImages.segmentation,
+    page: const SegmentationImagePicker(),
   );
   Items item5 = Items(
-    title: "Detection",
-    img: AppImages.detectObject,
-  );
+      title: "Detection",
+      img: AppImages.detectObject,
+      page: const DetectionImagePicker());
   Items item6 = Items(
     title: "X-Ray",
     img: AppImages.xRay,
+    page: const XRayImagePicker(),
   );
 
   GridDashboard({super.key});
@@ -49,7 +60,7 @@ class GridDashboard extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return DoctorImagePickerScreen(data.title);
+                  return data.page;
                 }));
               },
               child: Card(
@@ -93,5 +104,7 @@ class Items {
 
   String img;
 
-  Items({required this.title, required this.img});
+  Widget page;
+
+  Items({required this.title, required this.img, required this.page});
 }

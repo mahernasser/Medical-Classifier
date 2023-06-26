@@ -6,10 +6,8 @@ import 'package:grad_app/doctor/layout/bloc/doctor_states.dart';
 import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
-class DoctorImagePickerScreen extends StatelessWidget {
-  final String name;
-
-  const DoctorImagePickerScreen(this.name, {super.key});
+class XRayImagePicker extends StatelessWidget {
+  const XRayImagePicker({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +24,9 @@ class DoctorImagePickerScreen extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                Text(
-                  'Hello doc, Please pick $name image.',
-                  style: const TextStyle(
+                const Text(
+                  'Hello doc, Please pick X-Ray image.',
+                  style: TextStyle(
                       fontFamily: 'Poppins', color: Colors.white, fontSize: 19),
                 ),
                 const SizedBox(
