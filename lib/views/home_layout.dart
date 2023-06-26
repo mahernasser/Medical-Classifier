@@ -11,19 +11,22 @@ import 'home_page.dart';
 import 'profile_screen.dart';
 
 class HomeLayout extends StatefulWidget {
-  const HomeLayout({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+  const HomeLayout({Key? key, required this.userData}) : super(key: key);
 
   @override
-  State<HomeLayout> createState() => _HomeLayoutState();
+  State<HomeLayout> createState() => _HomeLayoutState(userData: userData);
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  List<Widget> pages = const [
+  final Map<String, dynamic> userData;
+  _HomeLayoutState({required this.userData});
+  List<Widget> pages = [
     HomePage(),
     PendingRequestsScreen(),
     ScanPage(),
     ConfirmedRequestsScreen(),
-    ProfileScreen(),
+    ProfileScreen(userData: {},),
   ];
   List<String> titles = const [
     "Home",
@@ -170,7 +173,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                           onPressed: () {
                             setState(
                               () {
-                                currentPage = const ProfileScreen();
+                                currentPage = ProfileScreen(userData: userData,);
                                 currentIndex = 4;
                               },
                             );

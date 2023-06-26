@@ -5,6 +5,9 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:grad_app/resources/app_images.dart';
 import 'package:grad_app/views/home_layout.dart';
 import 'package:grad_app/views/register_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -147,12 +150,26 @@ class LoginScreen extends StatelessWidget {
                             ),
                             DefaultButton(
                               text: 'Login',
-                              function: () {
+                              function: () async {
                                 if (formKey.currentState!.validate()) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const HomeLayout();
-                                  }));
+                                  var data = {
+                                    'username': emailController.text,
+                                    'password': passwordController.text
+                                  };
+                                  String url = "http://localhost:8080/signin";
+                                  Uri uri = Uri.parse(url);
+                                  print("URL is " + url);
+                                  print("####Sending keys####");
+                                  var response = await http.post(uri, body: data);
+                                  Map<String, dynamic> responseBody = jsonDecode(response.body);
+                                  if (responseBody['status'] == "true"){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return HomeLayout(userData: responseBody['data'],);
+                                        }));
+                                  }else{
+                                    print(response.statusCode);
+                                  }
                                 }
                               },
                               iconData: Icons.login,

@@ -6,6 +6,8 @@ import 'package:grad_app/resources/app_images.dart';
 import 'package:grad_app/views/home_layout.dart';
 import 'package:grad_app/views/login_screen.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -19,6 +21,8 @@ class RegisterScreen extends StatelessWidget {
     TextEditingController phoneController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController confirmController = TextEditingController();
+    TextEditingController genderController = TextEditingController();
+    TextEditingController typeController = TextEditingController();
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       body: SafeArea(
@@ -147,6 +151,38 @@ class RegisterScreen extends StatelessWidget {
                               prefixIcon: Icons.email_outlined,
                             ),
                             const SizedBox(
+                              height: 13,
+                            ),
+                            CustomField(
+                              labelText: 'Gender',
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'Gender is required';
+                                }
+                                return null;
+                              },
+                              inputType: TextInputType.text,
+                              obscure: false,
+                              controller: genderController,
+                              prefixIcon: Icons.male_outlined,
+                            ),
+                            const SizedBox(
+                              height: 13,
+                            ),
+                            CustomField(
+                              labelText: 'User Type',
+                              validator: (value) {
+                                if (value?.isEmpty ?? true) {
+                                  return 'User Type is required';
+                                }
+                                return null;
+                              },
+                              inputType: TextInputType.text,
+                              obscure: false,
+                              controller: typeController,
+                              prefixIcon: Icons.abc_outlined,
+                            ),
+                            const SizedBox(
                               height: 11,
                             ),
                             CustomField(
@@ -210,12 +246,29 @@ class RegisterScreen extends StatelessWidget {
                             DefaultButton(
                               text: 'Register',
                               iconData: Icons.login,
-                              function: () {
+                              function: () async {
                                 if (formKey.currentState!.validate()) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const HomeLayout();
-                                  }));
+                                  var data = {
+                                    'username': nameController.text,
+                                    'gender': genderController.text,
+                                    'age': ageController.text,
+                                    'phone': phoneController.text,
+                                    'email': emailController.text,
+                                    'password': passwordController.text,
+                                    'userType': typeController.text
+                                  };
+                                  String url = "http://localhost:8080/signup";
+                                  Uri uri = Uri.parse(url);
+                                  print("URL is " + url);
+                                  print("####Sending keys####");
+                                  var response = await http.post(uri, body: data);
+                                  Map<String, dynamic> responseBody = jsonDecode(response.body);
+                                  if (responseBody['status'] == 'true'){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return HomeLayout(userData: responseBody['data'],);
+                                        }));
+                                  }
                                 }
                               },
                             ),
