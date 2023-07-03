@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grad_app/doctor/image_picker/XRay_image_picker.dart';
 import 'package:grad_app/doctor/image_picker/detection/detection_image_picker.dart';
 import 'package:grad_app/doctor/image_picker/general/general_picker.dart';
 import 'package:grad_app/doctor/image_picker/knee_picker/image_picker_knee.dart';
 import 'package:grad_app/doctor/image_picker/mri_picker/picker_screen.dart';
+import 'package:grad_app/doctor/image_picker/xray_picker/picker_screen.dart';
 import 'package:grad_app/resources/app_images.dart';
 
 import '../image_picker/segmentation_picker/picker_screen.dart';
