@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grad_app/components/default_button.dart';
@@ -78,7 +79,7 @@ class XRayImagePicker extends StatelessWidget {
                                       child: IconButton(
                                         alignment: Alignment.center,
                                         onPressed: () {
-                                          cubit.takeRmiPhoto();
+                                          cubit.takeXRay();
                                           Navigator.pop(context);
                                         },
                                         icon: const Icon(
@@ -124,7 +125,7 @@ class XRayImagePicker extends StatelessWidget {
                                       child: IconButton(
                                         alignment: Alignment.center,
                                         onPressed: () {
-                                          cubit.getRmiPhoto();
+                                          cubit.getXRay();
                                           Navigator.pop(context);
                                         },
                                         icon: const Icon(
@@ -155,7 +156,7 @@ class XRayImagePicker extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                cubit.image != null
+                cubit.xRayImage != null
                     ? Container(
                         padding: const EdgeInsets.all(4.6),
                         decoration: BoxDecoration(
@@ -166,7 +167,7 @@ class XRayImagePicker extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image.file(
-                            cubit.image!,
+                            cubit.xRayImage!,
                             scale: 1.5,
                             height: MediaQuery.of(context).size.height * .38,
                             fit: BoxFit.cover,
@@ -177,6 +178,17 @@ class XRayImagePicker extends StatelessWidget {
                     : const SizedBox(
                         height: 0,
                       ),
+                const SizedBox(
+                  height: 8,
+                ),
+                ConditionalBuilder(
+                  condition: cubit.xRayImage != null,
+                  fallback: (context) => const SizedBox(),
+                  builder: (context) {
+                    return DefaultButton(
+                        text: 'Submit', iconData: Icons.send, function: () {});
+                  },
+                ),
               ],
             ),
           ),

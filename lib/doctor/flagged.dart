@@ -15,7 +15,7 @@ class Flagged extends StatelessWidget {
           FlaggedItem(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return RequestDetails();
+                  return const RequestDetails();
                 }));
               },
               patientName: 'Patient Name',

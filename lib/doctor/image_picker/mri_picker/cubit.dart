@@ -4,16 +4,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'app_states.dart';
+import 'states.dart';
 
-class HomeCubit extends Cubit<AppStates> {
-  HomeCubit() : super(HomeInitialState());
+class MriCubit extends Cubit<MriStates> {
+  MriCubit() : super(MriInitialState());
 
-  static HomeCubit get(context) => BlocProvider.of(context);
+  static MriCubit get(context) => BlocProvider.of(context);
+
   File? mriImage;
+
   ImagePicker mriPicker = ImagePicker();
 
-  Future<void> getRmiPhoto() async {
+  Future<void> getMri() async {
     final pickedFile = await mriPicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       mriImage = File(pickedFile.path);
@@ -23,7 +25,7 @@ class HomeCubit extends Cubit<AppStates> {
     }
   }
 
-  Future<void> takeRmiPhoto() async {
+  Future<void> takeMri() async {
     final pickedFile = await mriPicker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       mriImage = File(pickedFile.path);
