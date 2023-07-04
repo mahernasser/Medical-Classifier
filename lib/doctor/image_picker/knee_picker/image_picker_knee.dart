@@ -7,9 +7,12 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'knee_cubit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class KneeImagePicker extends StatelessWidget {
-  const KneeImagePicker({super.key});
+  String userToken;
+  const KneeImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,23 @@ class KneeImagePicker extends StatelessWidget {
                       return DefaultButton(
                           text: 'Submit',
                           iconData: Icons.send,
-                          function: () {});
+                          function: () {
+                            String url = "http://localhost:8080/knee";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.kneeImage
+                            };
+                            var response await http.post(
+                              uri,
+                              headers: headers,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
+                          });
                     },
                   ),
                 ],

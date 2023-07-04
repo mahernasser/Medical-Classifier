@@ -6,9 +6,12 @@ import 'package:grad_app/doctor/image_picker/general/general_cubit.dart';
 import 'package:grad_app/doctor/image_picker/general/general_states.dart';
 import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class GeneralImagePicker extends StatelessWidget {
-  const GeneralImagePicker({super.key});
+  Final String userToken;
+  const GeneralImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +188,23 @@ class GeneralImagePicker extends StatelessWidget {
                     fallback: (context) => const SizedBox(),
                     builder: (context) {
                       return DefaultButton(
-                          text: 'Submit', iconData: Icons.send, function: () {});
+                          text: 'Submit', iconData: Icons.send, function: () {
+                            String url = "http://localhost:8080/general";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.generalImage
+                            };
+                            var response await http.post(
+                              uri,
+                              headers: headers,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
+                          });
                     },
                   ),
                 ],

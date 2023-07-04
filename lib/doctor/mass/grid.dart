@@ -40,8 +40,8 @@ class GridDashboard extends StatelessWidget {
     img: AppImages.xRay,
     page: const XRayImagePicker(),
   );
-
-  GridDashboard({super.key});
+  Final String userToken;
+  GridDashboard({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

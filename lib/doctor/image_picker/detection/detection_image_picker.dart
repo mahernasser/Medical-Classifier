@@ -7,9 +7,12 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'detection_cubit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DetectionImagePicker extends StatelessWidget {
-  const DetectionImagePicker({super.key});
+  Final String userToken;
+  const DetectionImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +196,21 @@ class DetectionImagePicker extends StatelessWidget {
                         iconData: Icons.send,
                         function: () {
                           print('objects');
+                          String url = "http://localhost:8080/objectDetection";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.detectionImage
+                            };
+                            var response await http.post(
+                              uri,
+                              headers: headers,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
                         },
                       );
                     },

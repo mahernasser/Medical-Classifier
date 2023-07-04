@@ -9,9 +9,12 @@ import '../components/default_button.dart';
 import '../cubit/app_states.dart';
 import '../cubit/home_cubit.dart';
 import '../resources/app_colors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ScanPage extends StatefulWidget {
-  const ScanPage({Key? key}) : super(key: key);
+  Final String userToken;
+  const ScanPage({Key? key, required this.userToken}) : super(key: key);
 
   @override
   State<ScanPage> createState() => _ScanPageState();
@@ -251,12 +254,30 @@ class _ScanPageState extends State<ScanPage> {
                                     width: 2.0, color: AppColors.kPrimaryColor),
                               ),
                               onPressed: () {
+                                String url = "http://localhost:8080/uploadPatientImage";
+                                Uri uri = Uri.parse(url);
+                                var header = {
+                                  'Authorization': userToken
+                                };
+                                var body = {
+                                  'image': cubit.mriImage,
+                                  'doctor_username': selectedDoctorValue
+                                };
+                                var response await http.post(
+                                  uri,
+                                  headers: headers,
+                                  body: body
+                                );
+                                Map<String, dynamic> responseBody = jsonDecode(response.body);
+                                if(responseBody['status'] == "true"){
                                 MotionToast.success(
                                         title: const Text('Success'),
                                         position: MotionToastPosition.top,
                                         description: const Text(
                                             'We will response as soon as possible'))
                                     .show(context);
+                                }
+                                print(responseBody);
                               },
                               child: const Text(
                                 'Submit',

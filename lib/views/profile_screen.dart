@@ -240,8 +240,7 @@ class ProfileScreen extends StatelessWidget {
                   image: AppImages.logout,
                   function: () async {
                     Map<String, String> userToken = {
-                      'Authorization': userData['token'],
-                      'Content-Type': 'application/x-www-form-urlencoded'
+                      'Authorization': userData['token']
                     };
                     String url = "http://localhost:8080/signout";
                     Uri uri = Uri.parse(url);
