@@ -256,6 +256,20 @@ class ProfileScreen extends StatelessWidget {
                     }else{
                       print(responseBody);
                     }
+                    /*
+                                  Output(responseBody) should be like this:
+                                  {
+                                     "status": "true",
+                                     "message: ": "Logged in successfully!",
+                                     "data: ": {
+                                              "status": "true",
+                                              "message": "Signed out successfully",
+                                              "data": {
+                                                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTNjNTBmOWExYzZiZjkxMmIyZTRhOCIsImlhdCI6MTY4MzIxMTY5MH0.zqIiCOpOxPSb_A3aXkJFCI73cYubv_5MIHe_dfsFus4"
+                                                  }
+                                              }
+                                  }
+                                  */
                   },
                 ),
               ),

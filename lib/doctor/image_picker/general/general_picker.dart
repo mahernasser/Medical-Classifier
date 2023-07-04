@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GeneralImagePicker extends StatelessWidget {
-  Final String userToken;
+  final String userToken;
   const GeneralImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
@@ -188,7 +188,7 @@ class GeneralImagePicker extends StatelessWidget {
                     fallback: (context) => const SizedBox(),
                     builder: (context) {
                       return DefaultButton(
-                          text: 'Submit', iconData: Icons.send, function: () {
+                          text: 'Submit', iconData: Icons.send, function: () async {
                             String url = "http://localhost:8080/general";
                             Uri uri = Uri.parse(url);
                             var header = {
@@ -197,13 +197,37 @@ class GeneralImagePicker extends StatelessWidget {
                             var body = {
                               'image': cubit.generalImage
                             };
-                            var response await http.post(
+                            var response = await http.post(
                               uri,
-                              headers: headers,
+                              headers: header,
                               body: body
                             );
                             Map<String, dynamic> responseBody = jsonDecode(response.body);
                             print(responseBody);
+                            /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/TCGA_HT_8563_19981209_9_.jpg
+
+                                  Output(responseBody) should be like this:
+                                  {
+                                    "status": "true",
+                                    "message: ": "Classified Images Successfully!",
+                                    "data: ": [
+                                                {
+                                                  "id": "6453d7f5b42c3c56eccc3a5f",
+                                                  "image": "uploads\\image-1683216373377-10703109.jpg"
+                                                },
+                                                {
+                                                  "id": "6453d7f5b42c3c56eccc3a61",
+                                                  "image": "uploads\\image-1683216373377-921706813.jpg"
+                                                },
+                                                {
+                                                  "id": "6453d7f5b42c3c56eccc3a63",
+                                                  "image": "uploads\\image-1683216373378-793287055.jpg"
+                                                }
+                                              ]
+                                  }
+                            */
                           });
                     },
                   ),

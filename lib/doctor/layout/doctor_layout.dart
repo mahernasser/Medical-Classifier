@@ -19,9 +19,9 @@ class DoctorLayout extends StatelessWidget {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: const Color(0xff392850),
-            title: Text(cubit.titles[cubit.currentIndex]),
+            title: Text(cubit.titles![cubit.currentIndex]),
           ),
-          body: cubit.pages[cubit.currentIndex],
+          body: cubit.pages![cubit.currentIndex],
           bottomNavigationBar: ConvexAppBar(
             backgroundColor: const Color(0xff392850),
             elevation: 6,

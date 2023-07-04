@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MriImagePicker extends StatelessWidget {
-  Final String userToken;
+  final String userToken;
   const MriImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
@@ -197,7 +197,7 @@ class MriImagePicker extends StatelessWidget {
                       return DefaultButton(
                           text: 'Submit',
                           iconData: Icons.send,
-                          function: () {
+                          function: () async {
                             String url = "http://localhost:8080/mri";
                             Uri uri = Uri.parse(url);
                             var header = {
@@ -206,13 +206,33 @@ class MriImagePicker extends StatelessWidget {
                             var body = {
                               'image': cubit.mriImage
                             };
-                            var response await http.post(
+                            var response = await http.post(
                               uri,
-                              headers: headers,
+                              headers: header,
                               body: body
                             );
                             Map<String, dynamic> responseBody = jsonDecode(response.body);
                             print(responseBody);
+                            /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_MRI/images/1143_coronal_MRI_Knee.jpg,/C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_MRI/images/TCGA_HT_8563_19981209_11_.jpg
+
+                                  Output(responseBody) should be like this:
+                                  {
+                                    "status": "true",
+                                    "message: ": "Classified Images Successfully!",
+                                    "data: ": [
+                                                {
+                                                  "id": "6453d826b42c3c56eccc3a76",
+                                                  "image": "uploads\\image-1683216422422-570750201.jpg"
+                                                },
+                                                {
+                                                  "id": "6453d826b42c3c56eccc3a78",
+                                                  "image": "uploads\\image-1683216422422-627957460.jpg"
+                                                }
+                                              ]
+                                  }
+                            */
                           });
                     },
                   ),

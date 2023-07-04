@@ -170,6 +170,26 @@ class LoginScreen extends StatelessWidget {
                                   }else{
                                     print(response.statusCode);
                                   }
+                                  /*
+                                  Input data for testing is:
+                                  username = mostafa
+                                  password = 12345678
+                                  
+                                  Output(responseBody) should be like this:
+                                  {
+                                     "status": "true",
+                                     "message: ": "Logged in successfully!",
+                                     "data: ": {
+                                                    "username": "mostafa",
+                                                    "id": "6453c50f9a1c6bf912b2e4a8",
+                                                    "age": "22",
+                                                    "gender": "male",
+                                                    "userType": "Doctor",
+                                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTNjNTBmOWExYzZiZjkxMmIyZTRhOCIsImlhdCI6MTY4MzIxMTY5MH0.zqIiCOpOxPSb_A3aXkJFCI73cYubv_5MIHe_dfsFus4"
+                                                }
+                                  }
+                                  */
+                                  
                                 }
                               },
                               iconData: Icons.login,

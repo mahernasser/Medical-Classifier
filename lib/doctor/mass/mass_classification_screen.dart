@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'grid.dart';
 
 class MassClassificationScreen extends StatelessWidget {
-  const MassClassificationScreen({Key? key}) : super(key: key);
+  final String userToken;
+  const MassClassificationScreen({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class MassClassificationScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            GridDashboard(),
+            GridDashboard(userToken: userToken,),
           ],
         ),
       ),

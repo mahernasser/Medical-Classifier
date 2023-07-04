@@ -11,11 +11,12 @@ import '../views/register_screen.dart';
 import '../views/report_details_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp(userData: {},));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  Map<String, dynamic> userData = {};
+  MyApp({Key? key, required this.userData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +26,12 @@ class MyApp extends StatelessWidget {
           create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => LayoutCubit(),
+          create: (context) => LayoutCubit(userToken: userData['data']['token']),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const DoctorLayout(),
+        home: const DoctorLayout(userData: {},),
         routes: {
           ReportDetailsScreen.route: (context) => const ReportDetailsScreen(),
           LoginScreen.route: (context) => const LoginScreen(),
