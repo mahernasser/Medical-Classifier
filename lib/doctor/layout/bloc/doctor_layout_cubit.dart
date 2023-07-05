@@ -13,24 +13,27 @@ import 'package:image_picker/image_picker.dart';
 import 'doctor_states.dart';
 
 class LayoutCubit extends Cubit<DoctorStates> {
-  LayoutCubit() : super(DoctorInitialState());
+  final String userToken;
+  List<String>? titles;
+  List<Widget>? pages;
+  LayoutCubit({Key? key, required this.userToken}) : super(DoctorInitialState()){
+    List<String> titles = const [
+      'Mass Classification',
+      'Specific Classification',
+      'Flagged',
+      'Viewed',
+      'Profile',
+    ];
+    List<Widget> pages = [
+      MassClassificationScreen(userToken: userToken,),
+      SpecifyClassificationScreen(),
+      Flagged(),
+      Viewed(),
+      DoctorProfileScreen(),
+    ];
+  }
 
   static LayoutCubit get(context) => BlocProvider.of(context);
-
-  List<String> titles = const [
-    'Mass Classification',
-    'Specific Classification',
-    'Flagged',
-    'Viewed',
-    'Profile',
-  ];
-  List<Widget> pages = const [
-    MassClassificationScreen(),
-    SpecifyClassificationScreen(),
-    Flagged(),
-    Viewed(),
-    DoctorProfileScreen(),
-  ];
   int currentIndex = 0;
 
   void pageChange(int index) {

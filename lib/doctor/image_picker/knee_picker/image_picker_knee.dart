@@ -7,9 +7,12 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'knee_cubit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class KneeImagePicker extends StatelessWidget {
-  const KneeImagePicker({super.key});
+  final String userToken;
+  const KneeImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,43 @@ class KneeImagePicker extends StatelessWidget {
                       return DefaultButton(
                           text: 'Submit',
                           iconData: Icons.send,
-                          function: () {});
+                          function: () async {
+                            String url = "http://localhost:8080/knee";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.kneeImage
+                            };
+                            var response = await http.post(
+                              uri,
+                              headers: header,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
+                            /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/1066_axial_MRI_Knee.jpg,/C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/1167_coronal_MRI_Knee.jpg
+
+                                  Output(responseBody) should be like this:
+                                  {
+                                    "status": "true",
+                                    "message: ": "Classified Images Successfully!",
+                                    "data: ": [
+                                                {
+                                                  "id": "6453d865b42c3c56eccc3a88",
+                                                  "image": "uploads\\image-1683216485067-457637701.jpg"
+                                                },
+                                                {
+                                                  "id": "6453d865b42c3c56eccc3a8a",
+                                                  "image": "uploads\\image-1683216485067-152538413.jpg"
+                                                }
+                                              ]
+                                  }
+                            */
+                          });
                     },
                   ),
                 ],

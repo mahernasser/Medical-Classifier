@@ -270,6 +270,34 @@ class RegisterScreen extends StatelessWidget {
                                         }));
                                   }
                                 }
+                                /*
+                                  Input data for testing is:
+                                  username = mostafa
+                                  gender = male
+                                  age = 22
+                                  phone = 01021318712
+                                  email = mostafamahmoud.mm401@gmail.com
+                                  password = 12345678
+                                  userType = Doctor
+                                  
+                                  Output(responseBody) should be like this:
+                                  {
+                                     "status": "true",
+                                     "message: ": "Logged in successfully!",
+                                     "data: ": {
+                                            "status": "true",
+                                            "message: ": "Sign Up successfully!",
+                                            "data: ": {
+                                                    "username": "mostafa",
+                                                    "age": "22",
+                                                    "gender": "male",
+                                                    "userType": "Doctor",
+                                                    "email": "mostafamahmoud.mm401@gmail.com",
+                                                    "phone": "01021318712"
+                                                    }
+                                              }
+                                  }
+                                  */
                               },
                             ),
                             const SizedBox(

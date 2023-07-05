@@ -20,21 +20,25 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   final Map<String, dynamic> userData;
-  _HomeLayoutState({required this.userData});
-  List<Widget> pages = [
-    HomePage(),
-    PendingRequestsScreen(),
-    ScanPage(),
-    ConfirmedRequestsScreen(),
-    ProfileScreen(userData: {},),
-  ];
-  List<String> titles = const [
-    "Home",
-    'Pending Reports',
-    'Classification',
-    "Confirmed Reports",
-    "Profile",
-  ];
+  List<Widget>? pages;
+  List<String>? titles;
+
+  _HomeLayoutState({required this.userData}) {
+    List<Widget> pages = [
+      HomePage(),
+      PendingRequestsScreen(),
+      ScanPage(userToken: userData['data']['token'],),
+      ConfirmedRequestsScreen(),
+      ProfileScreen(userData: {},),
+    ];
+    List<String> titles = const [
+      "Home",
+      'Pending Reports',
+      'Classification',
+      "Confirmed Reports",
+      "Profile",
+    ];
+  }
   Widget currentPage = const HomePage();
   int currentIndex = 0;
   final PageStorageBucket bucket = PageStorageBucket();
@@ -48,7 +52,7 @@ class _HomeLayoutState extends State<HomeLayout> {
                 centerTitle: true,
                 backgroundColor: Colors.white,
                 elevation: 0,
-                title: Text(titles[currentIndex]),
+                title: Text(titles![currentIndex]),
                 titleTextStyle: const TextStyle(
                     color: AppColors.kPrimaryColor,
                     fontFamily: 'Poppins',
@@ -218,7 +222,7 @@ class _HomeLayoutState extends State<HomeLayout> {
               onPressed: () {
                 setState(() {
                   currentIndex = 2;
-                  currentPage = const ScanPage();
+                  currentPage = ScanPage(userToken: userData['data']['id'],);
                 });
               },
             ),

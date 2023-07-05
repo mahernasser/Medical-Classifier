@@ -9,12 +9,15 @@ import '../components/default_button.dart';
 import '../cubit/app_states.dart';
 import '../cubit/home_cubit.dart';
 import '../resources/app_colors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ScanPage extends StatefulWidget {
-  const ScanPage({Key? key}) : super(key: key);
+  String userToken = '';
+  ScanPage({Key? key, required this.userToken}) : super(key: key);
 
   @override
-  State<ScanPage> createState() => _ScanPageState();
+  State<ScanPage> createState() => _ScanPageState(userToken: userToken);
 }
 
 class _ScanPageState extends State<ScanPage> {
@@ -25,6 +28,8 @@ class _ScanPageState extends State<ScanPage> {
     "Dr. Kim",
   ];
   String? selectedDoctorValue;
+  final String userToken;
+  _ScanPageState({required this.userToken});
 
   @override
   Widget build(BuildContext context) {
@@ -250,13 +255,50 @@ class _ScanPageState extends State<ScanPage> {
                                 side: const BorderSide(
                                     width: 2.0, color: AppColors.kPrimaryColor),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
+                                String url = "http://localhost:8080/uploadPatientImage";
+                                Uri uri = Uri.parse(url);
+                                var header = {
+                                  'Authorization': userToken
+                                };
+                                var body = {
+                                  'image': cubit.mriImage,
+                                  'doctor_username': selectedDoctorValue
+                                };
+                                var response = await http.post(
+                                  uri,
+                                  headers: header,
+                                  body: body
+                                );
+                                Map<String, dynamic> responseBody = jsonDecode(response.body);
+                                if(responseBody['status'] == "true"){
                                 MotionToast.success(
                                         title: const Text('Success'),
                                         position: MotionToastPosition.top,
                                         description: const Text(
                                             'We will response as soon as possible'))
                                     .show(context);
+                                }
+                                print(responseBody);
+                                /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/0X32DC806BF959BA14_Sonar_Heart.jpg
+                                  doctor_username = mostafa14
+                                  
+                                  Output(responseBody) should be like this:
+                                  {
+                                     "status": "true",
+                                     "message: ": "Logged in successfully!",
+                                     "data: ": {
+                                                 "status": "true",
+                                                 "message": "Image uploaded successfully",
+                                                 "data": {
+                                                      "image": "uploads\\image-1683216732312-209130043.jpg",
+                                                      "id": "6453d95cb42c3c56eccc3ab4"
+                                                      }
+                                                }
+                                  }
+                                  */
                               },
                               child: const Text(
                                 'Submit',

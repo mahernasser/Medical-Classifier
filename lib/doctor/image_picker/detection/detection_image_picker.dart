@@ -7,9 +7,12 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'detection_cubit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DetectionImagePicker extends StatelessWidget {
-  const DetectionImagePicker({super.key});
+  final String userToken;
+  const DetectionImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,8 +194,39 @@ class DetectionImagePicker extends StatelessWidget {
                       return DefaultButton(
                         text: 'Submit',
                         iconData: Icons.send,
-                        function: () {
+                        function: () async {
                           print('objects');
+                          String url = "http://localhost:8080/objectDetection";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.detectionImage
+                            };
+                            var response = await http.post(
+                              uri,
+                              headers: header,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
+                            /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Object_Detection/images/patient02795{p0}_XR_Humerus.jpg
+
+                                  Output(responseBody) should be like this:
+                                  {
+                                    "status": "true",
+                                    "message: ": "Classified Images Successfully!",
+                                    "data: ": [
+                                                {
+                                                  "id": "6453d8b7b42c3c56eccc3a9f",
+                                                  "image": "uploads\\image-1683216567776-107924829.jpg"
+                                                }
+                                              ]
+                                  }
+                            */
                         },
                       );
                     },

@@ -7,9 +7,12 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'cubit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class XRayImagePicker extends StatelessWidget {
-  const XRayImagePicker({super.key});
+  final String userToken;
+  const XRayImagePicker({Key? key, required this.userToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,39 @@ class XRayImagePicker extends StatelessWidget {
                       return DefaultButton(
                           text: 'Submit',
                           iconData: Icons.send,
-                          function: () {});
+                          function: () async {
+                            String url = "http://localhost:8080/xr";
+                            Uri uri = Uri.parse(url);
+                            var header = {
+                              'Authorization': userToken
+                            };
+                            var body = {
+                              'image': cubit.xRayImage
+                            };
+                            var response = await http.post(
+                              uri,
+                              headers: header,
+                              body: body
+                            );
+                            Map<String, dynamic> responseBody = jsonDecode(response.body);
+                            print(responseBody);
+                            /*
+                                  Input data for testing is:
+                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/patient01093{p1}_XR_Wrist.jpg
+
+                                  Output(responseBody) should be like this:
+                                  {
+                                     "status": "true",
+                                     "message: ": "Classified Images Successfully!",
+                                     "data: ": [
+                                                  {
+                                                    "id": "6453d90ab42c3c56eccc3aa8",
+                                                    "image": "uploads\\image-1683216650259-865011206.jpg"
+                                                  }
+                                                ]
+                                  }
+                            */
+                          });
                     },
                   ),
                 ],

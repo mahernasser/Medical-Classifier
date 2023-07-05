@@ -10,42 +10,50 @@ import 'package:grad_app/resources/app_images.dart';
 import '../image_picker/segmentation_picker/picker_screen.dart';
 
 class GridDashboard extends StatelessWidget {
-  Items item1 = Items(
-      title: "General",
-      img: AppImages.general,
-      page: const GeneralImagePicker());
+  final String userToken;
+  Items? item1;
+  Items? item2;
+  Items? item3;
+  Items? item4;
+  Items? item5;
+  Items? item6;
 
-  Items item2 = Items(
-    title: "Mri",
-    img: AppImages.mriIcon,
-    page: const MriImagePicker(),
-  );
+  GridDashboard({Key? key, required this.userToken}) : super(key: key) {
+    item1 = Items(
+        title: "General",
+        img: AppImages.general,
+        page: GeneralImagePicker(userToken: this.userToken));
 
-  Items item3 = Items(
-    title: "Knee",
-    img: AppImages.knee,
-    page: const KneeImagePicker(),
-  );
-  Items item4 = Items(
-    title: "Segmentation",
-    img: AppImages.segmentation,
-    page: const SegmentationImagePicker(),
-  );
-  Items item5 = Items(
-      title: "Detection",
-      img: AppImages.detectObject,
-      page: const DetectionImagePicker());
-  Items item6 = Items(
-    title: "X-Ray",
-    img: AppImages.xRay,
-    page: const XRayImagePicker(),
-  );
+    item2 = Items(
+      title: "Mri",
+      img: AppImages.mriIcon,
+      page: MriImagePicker(userToken: this.userToken),
+    );
 
-  GridDashboard({super.key});
+    item3 = Items(
+      title: "Knee",
+      img: AppImages.knee,
+      page: KneeImagePicker(userToken: this.userToken),
+    );
+    item4 = Items(
+      title: "Segmentation",
+      img: AppImages.segmentation,
+      page: SegmentationImagePicker(userToken: this.userToken),
+    );
+    item5 = Items(
+        title: "Detection",
+        img: AppImages.detectObject,
+        page: DetectionImagePicker(userToken: this.userToken));
+    item6 = Items(
+      title: "X-Ray",
+      img: AppImages.xRay,
+      page: XRayImagePicker(userToken: this.userToken),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2, item3, item4, item5, item6];
+    List<Items> myList = [item1!, item2!, item3!, item4!, item5!, item6!];
     var color = 0xff453658;
     return Flexible(
       child: GridView.count(
