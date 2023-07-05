@@ -11,6 +11,8 @@ import '../views/register_screen.dart';
 import '../views/report_details_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // DioHelper.init();
   runApp(const MyApp());
 }
 
