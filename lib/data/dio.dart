@@ -21,7 +21,7 @@ class ImageDataSource {
     final result = await dio.fetch<Map<String, dynamic>>(
       Options(
         method: 'POST',
-        contentType: 'application/json',
+        contentType: 'multipart/form-data',
       ).compose(
         dio.options,
         "http://10.0.2.2:8080/general",

@@ -5,15 +5,11 @@ import 'package:grad_app/components/default_button.dart';
 import 'package:grad_app/doctor/image_picker/detection/detection_states.dart';
 import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'detection_cubit.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class DetectionImagePicker extends StatelessWidget {
-  final String userToken;
-  const DetectionImagePicker({Key? key, required this.userToken}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -88,7 +84,8 @@ class DetectionImagePicker extends StatelessWidget {
                                         child: IconButton(
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            cubit.takeDetection();
+                                            cubit.chooseMyImage(
+                                                source: ImageSource.camera);
                                             Navigator.pop(context);
                                           },
                                           icon: const Icon(
@@ -134,7 +131,8 @@ class DetectionImagePicker extends StatelessWidget {
                                         child: IconButton(
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            cubit.getDetection();
+                                            cubit.chooseMyImage(
+                                                source: ImageSource.gallery);
                                             Navigator.pop(context);
                                           },
                                           icon: const Icon(
@@ -195,38 +193,7 @@ class DetectionImagePicker extends StatelessWidget {
                         text: 'Submit',
                         iconData: Icons.send,
                         function: () async {
-                          print('objects');
-                          String url = "http://localhost:8080/objectDetection";
-                            Uri uri = Uri.parse(url);
-                            var header = {
-                              'Authorization': userToken
-                            };
-                            var body = {
-                              'image': cubit.detectionImage
-                            };
-                            var response = await http.post(
-                              uri,
-                              headers: header,
-                              body: body
-                            );
-                            Map<String, dynamic> responseBody = jsonDecode(response.body);
-                            print(responseBody);
-                            /*
-                                  Input data for testing is:
-                                  image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Object_Detection/images/patient02795{p0}_XR_Humerus.jpg
-
-                                  Output(responseBody) should be like this:
-                                  {
-                                    "status": "true",
-                                    "message: ": "Classified Images Successfully!",
-                                    "data: ": [
-                                                {
-                                                  "id": "6453d8b7b42c3c56eccc3a9f",
-                                                  "image": "uploads\\image-1683216567776-107924829.jpg"
-                                                }
-                                              ]
-                                  }
-                            */
+                          cubit.uploadImage();
                         },
                       );
                     },

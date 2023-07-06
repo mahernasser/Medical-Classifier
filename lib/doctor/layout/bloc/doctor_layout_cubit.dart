@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:grad_app/doctor/flagged.dart';
 import 'package:grad_app/doctor/mass/mass_classification_screen.dart';
 import 'package:grad_app/doctor/specify/specify_screen.dart';
 import 'package:grad_app/doctor/viewed.dart';
+import 'package:grad_app/models/classify.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'doctor_states.dart';
@@ -16,7 +19,8 @@ class LayoutCubit extends Cubit<DoctorStates> {
   final String userToken;
   List<String>? titles;
   List<Widget>? pages;
-  LayoutCubit({Key? key, required this.userToken}) : super(DoctorInitialState()){
+  LayoutCubit({Key? key, required this.userToken})
+      : super(DoctorInitialState()) {
     List<String> titles = const [
       'Mass Classification',
       'Specific Classification',
@@ -25,7 +29,9 @@ class LayoutCubit extends Cubit<DoctorStates> {
       'Profile',
     ];
     List<Widget> pages = [
-      MassClassificationScreen(userToken: userToken,),
+      MassClassificationScreen(
+        userToken: userToken,
+      ),
       SpecifyClassificationScreen(),
       Flagged(),
       Viewed(),
@@ -189,6 +195,38 @@ class LayoutCubit extends Cubit<DoctorStates> {
     } else {
       if (kDebugMode) {}
       emit(ImagePickErrorState());
+    }
+  }
+
+  final dio = Dio();
+  List<ClassifiedImage> classifiedImage = [];
+
+  Future<void> getClassifiedImages() async {
+    print('aa');
+    Map<String, String> headers = {
+      "Authorization":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTU1ZGEwOWRjYjI3ZDJiYTExZmRkZSIsImlhdCI6MTY4ODU5ODEwNn0.Tw28STVqyp3nmM_8maTELX8jY287UrfhbYn5rlhmCWQ"
+    };
+    final response = await dio.get(
+      "http://10.0.2.2:8080/doctorClassified",
+      options: Options(
+        headers: headers,
+        contentType: "application/json",
+        receiveDataWhenStatusError: true,
+      ),
+    );
+    Map<String, dynamic> json = jsonDecode(response.data.toString());
+    if (response.statusCode == 200) {
+      List<dynamic> data = json['data'];
+      classifiedImage =
+          data.map((item) => ClassifiedImage.fromJson(item)).toList();
+
+      print(response.data["data"][0]["classification"]);
+      print("=============");
+      print(classifiedImage);
+    } else {
+      print("********");
+      print(response.statusMessage);
     }
   }
 }

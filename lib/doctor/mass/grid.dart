@@ -20,34 +20,32 @@ class GridDashboard extends StatelessWidget {
 
   GridDashboard({Key? key, required this.userToken}) : super(key: key) {
     item1 = Items(
-        title: "General",
-        img: AppImages.general,
-        page: GeneralImagePicker(userToken: this.userToken));
+        title: "General", img: AppImages.general, page: GeneralImagePicker());
 
     item2 = Items(
       title: "Mri",
       img: AppImages.mriIcon,
-      page: MriImagePicker(userToken: this.userToken),
+      page: MriImagePicker(),
     );
 
     item3 = Items(
       title: "Knee",
       img: AppImages.knee,
-      page: KneeImagePicker(userToken: this.userToken),
+      page: KneeImagePicker(),
     );
     item4 = Items(
       title: "Segmentation",
       img: AppImages.segmentation,
-      page: SegmentationImagePicker(userToken: this.userToken),
+      page: SegmentationImagePicker(),
     );
     item5 = Items(
         title: "Detection",
         img: AppImages.detectObject,
-        page: DetectionImagePicker(userToken: this.userToken));
+        page: DetectionImagePicker());
     item6 = Items(
       title: "X-Ray",
       img: AppImages.xRay,
-      page: XRayImagePicker(userToken: this.userToken),
+      page: XRayImagePicker(),
     );
   }
 

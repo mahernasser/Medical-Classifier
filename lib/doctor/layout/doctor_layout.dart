@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grad_app/doctor/layout/bloc/doctor_layout_cubit.dart';
 import 'package:grad_app/doctor/layout/bloc/doctor_states.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class DoctorLayout extends StatelessWidget {
   final Map<String, dynamic> userData;

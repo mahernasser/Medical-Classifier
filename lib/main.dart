@@ -25,12 +25,14 @@ class MyApp extends StatelessWidget {
           create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => LayoutCubit(),
+          create: (context) => LayoutCubit(userToken: ''),
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const DoctorLayout(),
+        home: const DoctorLayout(
+          userData: {},
+        ),
         routes: {
           ReportDetailsScreen.route: (context) => const ReportDetailsScreen(),
           LoginScreen.route: (context) => const LoginScreen(),

@@ -4,7 +4,8 @@ import 'grid.dart';
 
 class MassClassificationScreen extends StatelessWidget {
   final String userToken;
-  const MassClassificationScreen({Key? key, required this.userToken}) : super(key: key);
+  const MassClassificationScreen({Key? key, required this.userToken})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,9 @@ class MassClassificationScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            GridDashboard(userToken: userToken,),
+            GridDashboard(
+              userToken: userToken,
+            ),
           ],
         ),
       ),

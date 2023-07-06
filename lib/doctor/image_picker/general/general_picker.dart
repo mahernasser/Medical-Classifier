@@ -6,6 +6,7 @@ import 'package:grad_app/doctor/image_picker/general/general_cubit.dart';
 import 'package:grad_app/doctor/image_picker/general/general_states.dart';
 import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GeneralImagePicker extends StatelessWidget {
   const GeneralImagePicker({super.key});
@@ -13,7 +14,7 @@ class GeneralImagePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=>GeneralCubit(),
+      create: (context) => GeneralCubit(),
       child: BlocConsumer<GeneralCubit, GeneralStates>(
         builder: (context, state) {
           GeneralCubit cubit = GeneralCubit.get(context);
@@ -30,7 +31,9 @@ class GeneralImagePicker extends StatelessWidget {
                   const Text(
                     'Hello doc, Please pick General image.',
                     style: TextStyle(
-                        fontFamily: 'Poppins', color: Colors.white, fontSize: 19),
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                        fontSize: 19),
                   ),
                   const SizedBox(
                     height: 30,
@@ -61,7 +64,8 @@ class GeneralImagePicker extends StatelessWidget {
                                 children: [
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         decoration: const BoxDecoration(
@@ -81,7 +85,8 @@ class GeneralImagePicker extends StatelessWidget {
                                         child: IconButton(
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            cubit.takeGeneral();
+                                            cubit.chooseMyImage(
+                                                source: ImageSource.camera);
                                             Navigator.pop(context);
                                           },
                                           icon: const Icon(
@@ -127,7 +132,8 @@ class GeneralImagePicker extends StatelessWidget {
                                         child: IconButton(
                                           alignment: Alignment.center,
                                           onPressed: () {
-                                            cubit.getGeneral();
+                                            cubit.chooseMyImage(
+                                                source: ImageSource.gallery);
                                             Navigator.pop(context);
                                           },
                                           icon: const Icon(
@@ -160,32 +166,67 @@ class GeneralImagePicker extends StatelessWidget {
                   ),
                   cubit.generalImage != null
                       ? Container(
-                    padding: const EdgeInsets.all(4.6),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                            width: 2,
-                            color: AppColors.kDoctorSecondaryColor)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.file(
-                        cubit.generalImage!,
-                        scale: 1.5,
-                        height: MediaQuery.of(context).size.height * .38,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                  )
+                          padding: const EdgeInsets.all(4.6),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                  width: 2,
+                                  color: AppColors.kDoctorSecondaryColor)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.file(
+                              cubit.generalImage!,
+                              scale: 1.5,
+                              height: MediaQuery.of(context).size.height * .38,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                          ),
+                        )
                       : const SizedBox(
-                    height: 0,
+                          height: 0,
+                        ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   ConditionalBuilder(
                     condition: cubit.generalImage != null,
                     fallback: (context) => const SizedBox(),
                     builder: (context) {
-                      return DefaultButton(
-                          text: 'Submit', iconData: Icons.send, function: () {});
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 47,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.indigo),
+                            onPressed: () {
+                              cubit.uploadImage();
+                            },
+                            child: ConditionalBuilder(
+                              condition: state is! ImageUploadLoadingState,
+                              builder: (context) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'SUBMIT',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(Icons.send_rounded),
+                                ],
+                              ),
+                              fallback: (context) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )),
+                      );
                     },
                   ),
                 ],
@@ -193,7 +234,15 @@ class GeneralImagePicker extends StatelessWidget {
             ),
           );
         },
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is ImageUploadSuccessState) {
+            // Fluttertoast.showToast(
+            //     msg: 'Image has been Processed Successfully!',
+            //     textColor: Colors.white,
+            //     fontSize: 15,
+            //     backgroundColor: AppColors.kDoctorPrimaryColor);
+          }
+        },
       ),
     );
   }

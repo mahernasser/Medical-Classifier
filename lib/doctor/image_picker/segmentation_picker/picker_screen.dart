@@ -7,13 +7,8 @@ import 'package:grad_app/resources/app_colors.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import 'cubit.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SegmentationImagePicker extends StatelessWidget {
-  final String userToken;
-  const SegmentationImagePicker({Key? key, required this.userToken}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -198,21 +193,6 @@ class SegmentationImagePicker extends StatelessWidget {
                           text: 'Submit',
                           iconData: Icons.send,
                           function: () async {
-                            String url = "http://localhost:8080/segmentation";
-                            Uri uri = Uri.parse(url);
-                            var header = {
-                              'Authorization': userToken
-                            };
-                            var body = {
-                              'image': cubit.segmentationImage
-                            };
-                            var response = await http.post(
-                              uri,
-                              headers: header,
-                              body: body
-                            );
-                            Map<String, dynamic> responseBody = jsonDecode(response.body);
-                            print(responseBody);
                             /*
                                   Input data for testing is:
                                   image = /C:/Users/oem/Downloads/Medical_Imaging_API's/Classification_General/images/TCGA_HT_8563_19981209_9_.jpg

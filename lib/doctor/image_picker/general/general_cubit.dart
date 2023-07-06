@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'general_states.dart';
@@ -9,7 +12,8 @@ class GeneralCubit extends Cubit<GeneralStates> {
 
   static GeneralCubit get(context) => BlocProvider.of(context);
 
-  XFile? generalImage; //variable for choosed file
+  File? generalImage;
+  //variable for choosed file
 
   // ImagePicker generalPicker = ImagePicker();
 
@@ -40,7 +44,7 @@ class GeneralCubit extends Cubit<GeneralStates> {
   final dio = Dio();
 
   Future<void> uploadImage() async {
-    emit(ImagePickLoadingState());
+    emit(ImageUploadLoadingState());
     try {
       Map<String, String> headers = {
         "Authorization":
@@ -60,13 +64,14 @@ class GeneralCubit extends Cubit<GeneralStates> {
                 ? MultipartFile.fromFileSync(
                     generalImage!.path,
                     filename: generalImage!.path.split("/").last,
+                    contentType: MediaType('image', 'jpeg'),
                   )
                 : null,
           },
         ),
       );
       if (response.data["status"] == "true" && response.statusCode == 200) {
-        emit(UploadImageStates());
+        emit(ImageUploadSuccessState());
         print(response.data);
       } else {
         emit(ImagePickErrorState(msg: "${response.data["status"]}"));
@@ -92,7 +97,7 @@ class GeneralCubit extends Cubit<GeneralStates> {
   chooseMyImage({ImageSource? source}) {
     ImagePicker.platform.getImage(source: source!).then((value) {
       if (value != null) {
-        generalImage = XFile(value.path);
+        generalImage = File(value.path);
         emit(ImagePickSuccessState());
       }
     });
