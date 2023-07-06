@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,6 +39,7 @@ class LayoutCubit extends Cubit<DoctorStates> {
       DoctorProfileScreen(),
     ];
   }
+  final dio = Dio();
 
   static LayoutCubit get(context) => BlocProvider.of(context);
   int currentIndex = 0;
@@ -59,6 +61,48 @@ class LayoutCubit extends Cubit<DoctorStates> {
   ImagePicker xRayPicker = ImagePicker();
   ImagePicker segmentationPicker = ImagePicker();
   ImagePicker detectionPicker = ImagePicker();
+
+  Future<void> getClassifiedImages() async {
+      Map<String, String> headers = {
+        "Authorization": userToken
+      };
+
+      final response = await dio.get(
+        "http://localhost:8080/doctorClassified",
+        options: Options(
+          headers: headers,
+          contentType: "multipart/form-data",
+          receiveDataWhenStatusError: true,
+        ),
+      );
+      if (response.data["status"] == "true") {
+        return response.data['data']
+        print(response.data);
+      } else {
+        print(response.data);
+      }
+  }
+  
+  Future<void> getFlagedImages() async {
+      Map<String, String> headers = {
+        "Authorization": userToken
+      };
+
+      final response = await dio.get(
+        "http://localhost:8080/doctorFlagged",
+        options: Options(
+          headers: headers,
+          contentType: "multipart/form-data",
+          receiveDataWhenStatusError: true,
+        ),
+      );
+      if (response.data["status"] == "true") {
+        return response.data['data']
+        print(response.data);
+      } else {
+        print(response.data);
+      }
+  }
 
   Future<void> getRmiPhoto() async {
     final pickedFile = await mriPicker.pickImage(source: ImageSource.gallery);
